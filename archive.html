@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NULL/SECTOR — COLD ARCHIVE · CASE FILES 0001–0021</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,600&family=JetBrains+Mono:wght@300;400;600&family=Major+Mono+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#050505;--paper:#0a0a0a;--bone:#e6e2d6;--ash:#7a7872;
+  --blood:#ff2a2a;--acid:#c8ff00;--halo:#00f0ff;--line:rgba(230,226,214,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{background:var(--ink);color:var(--bone);font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.88 0 0 0 0 0.82 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");opacity:.35;mix-blend-mode:overlay}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:91;background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(0,0,0,.25) 3px 4px);mix-blend-mode:multiply;opacity:.5}
+
+.cursor{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px var(--acid);pointer-events:none;z-index:100;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s,box-shadow .2s;mix-blend-mode:difference}
+
+.statusbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:10px 22px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.4));backdrop-filter:blur(6px)}
+.statusbar .l,.statusbar .r{display:flex;gap:18px;align-items:center;color:var(--ash)}
+.statusbar .pulse{display:inline-flex;align-items:center;gap:8px;color:var(--bone)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--blood);box-shadow:0 0 8px var(--blood);animation:blink 1.4s infinite}
+@keyframes blink{0%,60%{opacity:1}70%,100%{opacity:.15}}
+
+nav.main{position:fixed;top:34px;left:0;right:0;z-index:49;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px 22px}
+nav.main .brand{font-family:"Major Mono Display",monospace;font-size:18px;letter-spacing:.05em}
+nav.main .brand b{color:var(--blood);font-weight:400}
+nav.main ul{display:flex;gap:30px;justify-content:center;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+nav.main ul li a{position:relative;padding:6px 0;transition:color .3s}
+nav.main ul li a:hover,nav.main ul li a.active{color:var(--bone)}
+nav.main ul li a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--acid);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+nav.main ul li a:hover::after,nav.main ul li a.active::after{transform:scaleX(1)}
+nav.main .auth{justify-self:end;display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+nav.main .auth .key{color:var(--acid)}
+nav.main .auth .enter{border:1px solid var(--bone);padding:9px 16px;transition:.3s}
+nav.main .auth .enter:hover{background:var(--bone);color:var(--ink)}
+
+/* ARCHIVE HERO */
+.arc-hero{position:relative;padding:160px 22px 70px;overflow:hidden;border-bottom:1px solid var(--line);min-height:64vh;display:flex;align-items:end}
+.arc-hero::before{content:"";position:absolute;inset:0;background-image:url("https://images.unsplash.com/photo-1542903660-eedba2cda473?w=2600&q=85");background-size:cover;background-position:center;filter:grayscale(.8) contrast(1.3) brightness(.45);opacity:.55}
+.arc-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.6) 0%,rgba(5,5,5,.3) 50%,var(--ink) 100%)}
+.arc-hero .inner{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1.4fr .9fr;gap:60px;align-items:end}
+.arc-hero .crumb{font-size:11px;letter-spacing:.3em;color:var(--ash);text-transform:uppercase;margin-bottom:30px;display:flex;gap:10px;align-items:center}
+.arc-hero .crumb a{color:var(--ash);transition:color .3s}.arc-hero .crumb a:hover{color:var(--acid)}
+.arc-hero .crumb b{color:var(--blood);font-weight:400}
+.arc-hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(72px,12vw,200px);line-height:.84;letter-spacing:-.04em;color:var(--bone)}
+.arc-hero h1 i{font-style:italic;color:var(--blood)}
+.arc-hero h1 .slash{color:var(--ash);font-style:normal;font-weight:300}
+.arc-hero .sub{padding-bottom:16px;display:flex;flex-direction:column;gap:18px}
+.arc-hero .sub p{font-size:13px;line-height:1.8;color:#bdbab0;max-width:42ch}
+.arc-hero .sub p b{color:var(--bone)}
+.arc-hero .sub .pgp{font-size:10px;letter-spacing:.22em;color:var(--acid);text-transform:uppercase;padding:10px 14px;border:1px solid var(--acid);align-self:flex-start}
+.arc-hero .corner{position:absolute;width:18px;height:18px;border:1px solid var(--blood);z-index:3}
+.arc-hero .c1{top:90px;left:14px;border-right:0;border-bottom:0}
+.arc-hero .c2{top:90px;right:14px;border-left:0;border-bottom:0}
+.arc-hero .c3{bottom:14px;left:14px;border-right:0;border-top:0}
+.arc-hero .c4{bottom:14px;right:14px;border-left:0;border-top:0}
+
+/* STATS STRIP */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);background:#070707}
+.stats-strip .s{padding:30px 26px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.stats-strip .s:last-child{border-right:0}
+.stats-strip .s .k{font-size:10px;letter-spacing:.3em;color:var(--ash);text-transform:uppercase}
+.stats-strip .s .v{font-family:"Major Mono Display",monospace;font-size:42px;color:var(--bone);letter-spacing:.02em;line-height:1}
+.stats-strip .s .v em{font-style:normal;color:var(--blood)}
+.stats-strip .s .n{font-size:10.5px;color:#9b988d;letter-spacing:.1em}
+
+/* FILTER BAR */
+.filterbar{position:sticky;top:0;z-index:48;display:flex;flex-wrap:wrap;gap:0;background:rgba(5,5,5,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:14px 22px;align-items:center}
+.filterbar .lbl{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ash);margin-right:18px}
+.filterbar button{background:transparent;border:1px solid var(--line);color:var(--ash);font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;padding:9px 14px;margin:4px 6px 4px 0;cursor:none;transition:.25s;display:inline-flex;gap:8px;align-items:center}
+.filterbar button:hover{color:var(--bone);border-color:var(--bone)}
+.filterbar button.on{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.filterbar button .ct{color:var(--blood);font-size:9.5px}
+.filterbar button.on .ct{color:var(--ink);opacity:.6}
+.filterbar .right{margin-left:auto;font-size:10px;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;display:flex;gap:14px;align-items:center}
+.filterbar .right b{color:var(--acid);font-weight:400}
+
+/* ARCHIVE LIST */
+.archive-list{padding:0 22px 90px}
+.entry{display:grid;grid-template-columns:240px 1fr 220px;gap:0;border-bottom:1px solid var(--line);transition:background .35s;position:relative}
+.entry:hover{background:#080808}
+.entry.hide{display:none}
+.entry .img{position:relative;overflow:hidden;border-right:1px solid var(--line);min-height:240px}
+.entry .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.25) brightness(.7);transition:filter .8s,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.entry:hover .img img{filter:grayscale(.2) contrast(1.3) brightness(.85);transform:scale(1.06)}
+.entry .img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(5,5,5,.8));pointer-events:none}
+.entry .img .id{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.22em;color:var(--bone);background:rgba(0,0,0,.7);padding:4px 8px;border:1px solid var(--line);z-index:2}
+.entry .img .yr{position:absolute;bottom:12px;left:12px;font-family:"Major Mono Display",monospace;font-size:28px;color:var(--bone);letter-spacing:.04em;z-index:2}
+
+.entry .meta{padding:30px 32px;display:flex;flex-direction:column;gap:14px;border-right:1px solid var(--line)}
+.entry .meta .row{display:flex;gap:14px;align-items:center;font-size:10px;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;flex-wrap:wrap}
+.entry .meta .row .sep{color:#3a3934}
+.entry .meta .tag{display:inline-block;padding:3px 9px;border:1px solid var(--acid);color:var(--acid);font-size:9.5px;letter-spacing:.25em;margin-left:auto}
+.entry .meta .tag.ransom{border-color:var(--blood);color:var(--blood)}
+.entry .meta .tag.state{border-color:var(--halo);color:var(--halo)}
+.entry .meta .tag.breach{border-color:#ffb800;color:#ffb800}
+.entry .meta .tag.market{border-color:var(--acid);color:var(--acid)}
+.entry .meta .tag.takedown{border-color:var(--bone);color:var(--bone)}
+.entry .meta .tag.heist{border-color:#ff8400;color:#ff8400}
+.entry .meta .tag.extort{border-color:#d946ef;color:#d946ef}
+
+.entry h3{font-family:"Fraunces",serif;font-weight:300;font-size:36px;line-height:1.02;letter-spacing:-.02em;color:var(--bone);max-width:22ch}
+.entry h3 i{font-style:italic;color:var(--blood);font-weight:300}
+.entry h3 .blk{display:inline-block;background:var(--bone);color:transparent;padding:0 .18em;user-select:none}
+.entry .desc{font-size:13px;line-height:1.75;color:#aeaba1;max-width:64ch}
+.entry .desc b{color:var(--bone);font-weight:600}
+.entry .stats{display:flex;gap:24px;padding-top:8px;flex-wrap:wrap}
+.entry .stats div{display:flex;flex-direction:column;gap:4px;min-width:90px}
+.entry .stats .k{font-size:9.5px;letter-spacing:.2em;color:var(--ash);text-transform:uppercase}
+.entry .stats .v{font-family:"Major Mono Display",monospace;font-size:18px;color:var(--bone);letter-spacing:.02em}
+
+.entry .status{padding:30px 24px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+.entry .status .badge{font-size:10px;letter-spacing:.28em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--bone);color:var(--bone);align-self:flex-start;display:inline-flex;gap:8px;align-items:center}
+.entry .status .badge .b{width:6px;height:6px;border-radius:50%;background:var(--bone)}
+.entry .status .badge.sealed{border-color:var(--blood);color:var(--blood)}
+.entry .status .badge.sealed .b{background:var(--blood);box-shadow:0 0 8px var(--blood)}
+.entry .status .badge.cold{border-color:var(--halo);color:var(--halo)}
+.entry .status .badge.cold .b{background:var(--halo);box-shadow:0 0 8px var(--halo)}
+.entry .status .badge.active{border-color:var(--acid);color:var(--acid)}
+.entry .status .badge.active .b{background:var(--acid);box-shadow:0 0 8px var(--acid);animation:blink 1.4s infinite}
+.entry .status .meta-r{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash);line-height:1.8}
+.entry .status .meta-r b{color:var(--bone);font-weight:400;display:block;margin-top:4px}
+.entry .status .open{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px dashed var(--line);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--bone);cursor:none}
+.entry .status .open .arr{transition:transform .3s;color:var(--acid)}
+.entry:hover .status .open .arr{transform:translateX(8px)}
+
+.no-results{padding:80px 22px;text-align:center;color:var(--ash);font-size:13px;letter-spacing:.2em;text-transform:uppercase;display:none}
+.no-results.show{display:block}
+
+/* FOOTER */
+footer{padding:80px 22px 30px;background:#040404;color:var(--ash);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+footer .grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:60px;border-bottom:1px solid var(--line)}
+footer .brand-blk h5{font-family:"Major Mono Display",monospace;font-size:32px;color:var(--bone);letter-spacing:.04em;margin-bottom:14px}
+footer .brand-blk h5 b{color:var(--blood);font-weight:400}
+footer .brand-blk p{font-family:"Fraunces",serif;font-style:italic;font-size:14px;letter-spacing:0;text-transform:none;color:#b8b5ab;line-height:1.6;max-width:36ch}
+footer .col h6{color:var(--bone);font-size:11px;letter-spacing:.3em;margin-bottom:18px;font-weight:400}
+footer .col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+footer .col ul li a{transition:color .3s}
+footer .col ul li a:hover{color:var(--acid)}
+footer .bot{display:flex;justify-content:space-between;align-items:center;padding-top:24px;gap:20px;flex-wrap:wrap}
+footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-height:1;color:#2a2a2a;letter-spacing:0;text-transform:none;white-space:pre}
+
+@media (max-width:1100px){
+  .entry{grid-template-columns:200px 1fr}
+  .entry .status{grid-column:1 / -1;flex-direction:row;align-items:center;border-top:1px solid var(--line);padding:18px 22px}
+  .entry .status .meta-r{display:none}
+  .entry .status .open{border:0;padding:0;margin-left:auto}
+}
+@media (max-width:760px){
+  .arc-hero .inner{grid-template-columns:1fr;gap:30px}
+  .stats-strip{grid-template-columns:1fr 1fr}
+  .stats-strip .s:nth-child(2){border-right:0}
+  .stats-strip .s:nth-child(1),.stats-strip .s:nth-child(2){border-bottom:1px solid var(--line)}
+  .entry{grid-template-columns:1fr}
+  .entry .img{min-height:200px;border-right:0;border-bottom:1px solid var(--line)}
+  .entry .meta{border-right:0}
+  nav.main{grid-template-columns:1fr 1fr;gap:10px}
+  nav.main ul{display:none}
+  footer .grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+
+<div class="statusbar">
+  <div class="l">
+    <span class="pulse"><span class="dot"></span> COLD ROOM · TEMP -18°C · 04:17:22 UTC</span>
+    <span>VAULT&nbsp;//&nbsp;REYKJAVÍK.SUBL-02</span>
+    <span>SHELF 0xC7 · DRAWER 14</span>
+  </div>
+  <div class="r">
+    <span>AES-256 · GPG SEAL</span>
+    <span>SIG 0xF7A2 9C4E</span>
+    <span style="color:var(--acid)">READ-ONLY</span>
+  </div>
+</div>
+
+<nav class="main">
+  <a href="index.html" class="brand">null<b>/</b>sector</a>
+  <ul>
+    <li><a href="index.html#index">Index</a></li>
+    <li><a href="index.html#operations">Operations</a></li>
+    <li><a href="index.html#dossiers">Dossiers</a></li>
+    <li><a href="archive.html" class="active">Archive</a></li>
+    <li><a href="index.html#signal">Signal</a></li>
+  </ul>
+  <div class="auth">
+    <span class="key">[PGP&nbsp;0xF7A2]</span>
+    <a href="index.html#signal" class="enter">Request key →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="arc-hero">
+  <span class="corner c1"></span><span class="corner c2"></span>
+  <span class="corner c3"></span><span class="corner c4"></span>
+
+  <div class="inner">
+    <div>
+      <div class="crumb">
+        <a href="index.html">NULL/SECTOR</a> <span>/</span>
+        <span>Vault</span> <span>/</span>
+        <b>Cold Archive 0xC7</b>
+      </div>
+      <h1>Cold<i>/</i><br><span class="slash">archive</span></h1>
+    </div>
+    <div class="sub">
+      <p><b>Twenty-one cases.</b> A reader's index of the most consequential dark-web takedowns, ransomware campaigns, and state-grade intrusions of the last sixteen years — assembled from public filings, court documents, and our own source network.</p>
+      <p>Every file is mirrored on nine onion nodes and cryptographically sealed at 04:00 UTC daily.</p>
+      <span class="pgp">▶ FILES SIGNED — 0xF7A2 9C4E · ED25519</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="s">
+    <span class="k">Case files</span>
+    <span class="v">021</span>
+    <span class="n">indexed · 2010 — 2024</span>
+  </div>
+  <div class="s">
+    <span class="k">Estimated damages</span>
+    <span class="v">$<em>26.4</em>B</span>
+    <span class="n">aggregated · USD 2024-adj.</span>
+  </div>
+  <div class="s">
+    <span class="k">Records exposed</span>
+    <span class="v">312<em>M</em></span>
+    <span class="n">unique identities</span>
+  </div>
+  <div class="s">
+    <span class="k">Convictions</span>
+    <span class="v">047</span>
+    <span class="n">across 23 jurisdictions</span>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filterbar" id="filterbar">
+  <span class="lbl">▼ Filter</span>
+  <button class="on" data-f="all">All <span class="ct">21</span></button>
+  <button data-f="market">Marketplace <span class="ct">03</span></button>
+  <button data-f="takedown">Takedown <span class="ct">03</span></button>
+  <button data-f="ransom">Ransomware <span class="ct">04</span></button>
+  <button data-f="breach">Breach <span class="ct">04</span></button>
+  <button data-f="state">State-Op <span class="ct">04</span></button>
+  <button data-f="heist">Heist <span class="ct">02</span></button>
+  <button data-f="extort">Extortion <span class="ct">02</span></button>
+  <div class="right"><span>Sort · <b>most recent</b></span></div>
+</div>
+
+<!-- ARCHIVE LIST -->
+<section class="archive-list" id="list">
+
+<article class="entry" data-type="takedown">
+  <div class="img"><img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=900&q=85" alt="encrypted handset"><span class="id">CASE 0021</span><span class="yr">2024</span></div>
+  <div class="meta">
+    <div class="row"><span>FEB 19 · UK NCA × FBI × EUROPOL</span><span class="sep">/</span><span>Op. CRONOS</span><span class="tag takedown">TAKEDOWN</span></div>
+    <h3><i>LockBit</i>, seized at midnight.</h3>
+    <p class="desc">A coordinated raid took thirty-four servers across three continents offline in a single night. Investigators reflashed LockBit's own leak portal into a <b>countdown clock</b> taunting the gang, then began publishing decryptors, affiliate lists, and the real-world identity of the administrator known as <b>LockBitSupp</b>.</p>
+    <div class="stats">
+      <div><span class="k">Servers seized</span><span class="v">34</span></div>
+      <div><span class="k">Attacks (lifetime)</span><span class="v">7,000</span></div>
+      <div><span class="k">Ransom collected</span><span class="v">$120M</span></div>
+      <div><span class="k">Affiliates ID'd</span><span class="v">194</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Lead investigator<b>NCA · LON</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="extort">
+  <div class="img"><img src="https://images.unsplash.com/photo-1517242810446-cc8951b2be40?w=900&q=85" alt="red interior light"><span class="id">CASE 0020</span><span class="yr">2023</span></div>
+  <div class="meta">
+    <div class="row"><span>SEP 10 · LAS VEGAS · US</span><span class="sep">/</span><span>Scattered Spider × ALPHV</span><span class="tag extort">EXTORTION</span></div>
+    <h3>A <i>ten-minute</i> phone call to the help desk.</h3>
+    <p class="desc">A native-English speaking teenager phoned MGM's IT support, claimed to be a locked-out employee, and walked out with privileged credentials. Within hours slot machines, room keys, and reservation systems were offline across <b>thirty-one properties</b>. MGM refused to pay; the cleanup ran ten days and a hundred million dollars.</p>
+    <div class="stats">
+      <div><span class="k">Loss</span><span class="v">$100M</span></div>
+      <div><span class="k">Downtime</span><span class="v">10 days</span></div>
+      <div><span class="k">Properties hit</span><span class="v">31</span></div>
+      <div><span class="k">Entry vector</span><span class="v">1 call</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Threat actor<b>UNC-3944</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="breach">
+  <div class="img"><img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=900&q=85" alt="binary stream"><span class="id">CASE 0019</span><span class="yr">2023</span></div>
+  <div class="meta">
+    <div class="row"><span>MAY 27 · GLOBAL</span><span class="sep">/</span><span>Cl0p · CVE-2023-34362</span><span class="tag breach">BREACH</span></div>
+    <h3>MOVEit, in one <i>silent</i> weekend.</h3>
+    <p class="desc">Over the US Memorial Day holiday Cl0p mass-exploited a SQL-injection zero-day in Progress Software's MOVEit Transfer appliance — the kind of boring B2B file-mover that quietly underpins payrolls and patient records. By the time anyone noticed, <b>2,700+ organisations</b> and 95 million identities had been quietly emptied.</p>
+    <div class="stats">
+      <div><span class="k">Orgs affected</span><span class="v">2,700+</span></div>
+      <div><span class="k">Records</span><span class="v">95M</span></div>
+      <div><span class="k">Zero-days</span><span class="v">1</span></div>
+      <div><span class="k">Estimated cost</span><span class="v">$15B</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge active"><span class="b"></span> Open</span>
+    <div class="meta-r">Class actions<b>62 · ongoing</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="takedown">
+  <div class="img"><img src="https://images.unsplash.com/photo-1488229297570-58520851e868?w=900&q=85" alt="anonymous mask"><span class="id">CASE 0018</span><span class="yr">2022</span></div>
+  <div class="meta">
+    <div class="row"><span>APR 05 · BERLIN · DE × US DOJ</span><span class="sep">/</span><span>Hydra Market</span><span class="tag takedown">TAKEDOWN</span></div>
+    <h3>Hydra, the <i>5-billion-dollar</i> bazaar.</h3>
+    <p class="desc">For seven years Hydra Market was the gravitational centre of the Russian-language dark web — a single platform handling drug sales, money laundering, and identity trade for nearly seventeen million customers. German federal police pulled the servers from a Frankfurt data centre at dawn and seized <b>$25M in bitcoin</b>.</p>
+    <div class="stats">
+      <div><span class="k">Lifetime GMV</span><span class="v">$5.2B</span></div>
+      <div><span class="k">Customers</span><span class="v">17M</span></div>
+      <div><span class="k">BTC seized</span><span class="v">543</span></div>
+      <div><span class="k">Lifespan</span><span class="v">7 yrs</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Lead investigator<b>BKA · WIESBADEN</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="extort">
+  <div class="img"><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=900&q=85" alt="terminal session"><span class="id">CASE 0017</span><span class="yr">2022</span></div>
+  <div class="meta">
+    <div class="row"><span>MAR · LONDON · UK / SÃO PAULO · BR</span><span class="sep">/</span><span>DEV-0537</span><span class="tag extort">EXTORTION</span></div>
+    <h3>Lapsus$ — seven targets, <i>average age 17</i>.</h3>
+    <p class="desc">A loose group of teenagers, organised on Telegram, SIM-swapped and social-engineered their way into <b>NVIDIA, Samsung, Microsoft, Okta, Vodafone, Uber and Rockstar Games</b> in the space of four months. Their Twitter polls — "who do we leak next?" — were the most-watched live feed in the security industry.</p>
+    <div class="stats">
+      <div><span class="k">Major breaches</span><span class="v">7</span></div>
+      <div><span class="k">Arrests</span><span class="v">7</span></div>
+      <div><span class="k">Avg. age</span><span class="v">17</span></div>
+      <div><span class="k">Source leaked</span><span class="v">1.6TB</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Verdict (lead)<b>HMP RYE HILL</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="breach">
+  <div class="img"><img src="https://images.unsplash.com/photo-1496449903678-68ddcb189a24?w=900&q=85" alt="red binary"><span class="id">CASE 0016</span><span class="yr">2022</span></div>
+  <div class="meta">
+    <div class="row"><span>FEB 27 · ANON. INSIDER</span><span class="sep">/</span><span>"ContiLeaks"</span><span class="tag breach">LEAK</span></div>
+    <h3>Conti, leaked by <i>one of their own</i>.</h3>
+    <p class="desc">Hours after the Conti ransomware crew publicly pledged loyalty to the Russian government, a Ukrainian member opened a Twitter account named @ContiLeaks and dumped sixty thousand internal Jabber messages, source code, training manuals and HR spreadsheets. The gang dissolved within four months.</p>
+    <div class="stats">
+      <div><span class="k">Chats leaked</span><span class="v">60k</span></div>
+      <div><span class="k">Files</span><span class="v">393</span></div>
+      <div><span class="k">Members ID'd</span><span class="v">81</span></div>
+      <div><span class="k">Gang fate</span><span class="v">DISSOLVED</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Disclosed by<b>UA INSIDER</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="ransom">
+  <div class="img"><img src="https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=900&q=85" alt="server racks"><span class="id">CASE 0015</span><span class="yr">2021</span></div>
+  <div class="meta">
+    <div class="row"><span>JUL 02 · MIAMI · US</span><span class="sep">/</span><span>REvil / Sodinokibi</span><span class="tag ransom">RANSOMWARE</span></div>
+    <h3>Kaseya VSA — one update, <i>fifteen hundred</i> victims.</h3>
+    <p class="desc">REvil chained six previously unknown vulnerabilities in Kaseya's IT-management platform to ship ransomware down the trusted update channel to managed service providers. The downstream victims — Swedish supermarket chains, New Zealand schools — were collateral. The asking price: $70 million.</p>
+    <div class="stats">
+      <div><span class="k">Victims</span><span class="v">~1,500</span></div>
+      <div><span class="k">Demand</span><span class="v">$70M</span></div>
+      <div><span class="k">Zero-days</span><span class="v">6</span></div>
+      <div><span class="k">MSPs hit</span><span class="v">60</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Lead extradition<b>POLAND · 2021</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="ransom">
+  <div class="img"><img src="https://images.unsplash.com/photo-1605792657660-596af9009e82?w=900&q=85" alt="industrial valves"><span class="id">CASE 0014</span><span class="yr">2021</span></div>
+  <div class="meta">
+    <div class="row"><span>MAY 07 · HOUSTON · US</span><span class="sep">/</span><span>DarkSide</span><span class="tag ransom">RANSOMWARE</span></div>
+    <h3>The Colonial Pipeline, halted by <i>one</i> leaked password.</h3>
+    <p class="desc">A reused VPN password — for an account with no MFA — gave DarkSide affiliates the keys to a 5,500-mile fuel artery. Colonial paid $4.4 million in bitcoin within hours; the FBI later clawed back $2.3 million by following the wallet. The US East Coast went short on gasoline for five days.</p>
+    <div class="stats">
+      <div><span class="k">Ransom paid</span><span class="v">$4.4M</span></div>
+      <div><span class="k">Recovered</span><span class="v">$2.3M</span></div>
+      <div><span class="k">Pipeline down</span><span class="v">5 days</span></div>
+      <div><span class="k">Entry vector</span><span class="v">1 cred.</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Gang fate<b>REBRANDED</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="state">
+  <div class="img"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=900&q=85" alt="data center blue"><span class="id">CASE 0013</span><span class="yr">2020</span></div>
+  <div class="meta">
+    <div class="row"><span>DEC 13 · AUSTIN · US</span><span class="sep">/</span><span>APT29 · "SUNBURST"</span><span class="tag state">STATE OP</span></div>
+    <h3>SolarWinds — a <i>poisoned</i> software update.</h3>
+    <p class="desc">For fourteen months, a backdoor signed with SolarWinds' own code-signing certificate rode the Orion auto-update channel into eighteen thousand networks, including nine US federal agencies and dozens of Fortune 500s. The actors triaged the victim list by hand and only escalated against the most useful hundred.</p>
+    <div class="stats">
+      <div><span class="k">Orion downloads</span><span class="v">18,000</span></div>
+      <div><span class="k">Active targets</span><span class="v">~100</span></div>
+      <div><span class="k">Fed. agencies</span><span class="v">9</span></div>
+      <div><span class="k">Dwell time</span><span class="v">14 mo.</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge active"><span class="b"></span> Open</span>
+    <div class="meta-r">Attribution<b>SVR · MOSCOW</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="takedown">
+  <div class="img"><img src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=900&q=85" alt="dim workstation"><span class="id">CASE 0012</span><span class="yr">2017</span></div>
+  <div class="meta">
+    <div class="row"><span>JUL 20 · NL × US × TH</span><span class="sep">/</span><span>Op. BAYONET</span><span class="tag takedown">TAKEDOWN</span></div>
+    <h3>AlphaBay falls. Hansa is <i>worn as a mask</i>.</h3>
+    <p class="desc">The FBI seized AlphaBay — ten times the size of the original Silk Road — then handed the Dutch police a perfectly-timed gift: refugees fleeing to the next-largest market, Hansa, walked into a server farm already controlled by law enforcement. For twenty-seven days the Dutch ran the market themselves, harvesting addresses.</p>
+    <div class="stats">
+      <div><span class="k">AlphaBay users</span><span class="v">400k</span></div>
+      <div><span class="k">Listings</span><span class="v">250k</span></div>
+      <div><span class="k">Hansa undercover</span><span class="v">27 days</span></div>
+      <div><span class="k">Admin fate</span><span class="v">DECEASED</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Lead jurisdiction<b>FBI · SAC</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="breach">
+  <div class="img"><img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=900&q=85" alt="late laptop work"><span class="id">CASE 0011</span><span class="yr">2017</span></div>
+  <div class="meta">
+    <div class="row"><span>SEP 07 · ATLANTA · US</span><span class="sep">/</span><span>CVE-2017-5638</span><span class="tag breach">BREACH</span></div>
+    <h3>Equifax — <i>147 million</i> Americans, on one unpatched server.</h3>
+    <p class="desc">A two-month-old Apache Struts vulnerability sat unpatched on a public-facing Equifax web portal. Attackers wandered the internal network for seventy-six days before anyone noticed; what they took was almost the entire adult population of the United States: names, addresses, social security numbers, driver's license data.</p>
+    <div class="stats">
+      <div><span class="k">Records lost</span><span class="v">147M</span></div>
+      <div><span class="k">Dwell time</span><span class="v">76 days</span></div>
+      <div><span class="k">Settlement</span><span class="v">$1.4B</span></div>
+      <div><span class="k">Patch overdue</span><span class="v">63 days</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Regulator<b>FTC · CFPB</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="state">
+  <div class="img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=900&q=85" alt="city after dark"><span class="id">CASE 0010</span><span class="yr">2017</span></div>
+  <div class="meta">
+    <div class="row"><span>JUN 27 · KYIV → GLOBAL</span><span class="sep">/</span><span>Sandworm / GRU 74455</span><span class="tag state">STATE OP</span></div>
+    <h3>NotPetya — ransomware that <i>never intended</i> to decrypt.</h3>
+    <p class="desc">Wearing the costume of ransomware, NotPetya was a wiper: launched through a poisoned update to a piece of Ukrainian tax software, it spread laterally and destroyed everything it touched. Maersk lost its global shipping network and rebuilt forty-five thousand endpoints in ten days. Total damages: ten billion dollars.</p>
+    <div class="stats">
+      <div><span class="k">Damages</span><span class="v">$10B</span></div>
+      <div><span class="k">Maersk endpoints</span><span class="v">45k</span></div>
+      <div><span class="k">Decryption</span><span class="v">NONE</span></div>
+      <div><span class="k">Attribution</span><span class="v">GRU</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge active"><span class="b"></span> Open</span>
+    <div class="meta-r">Indictment<b>DOJ · 2020</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="ransom">
+  <div class="img"><img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=900&q=85" alt="lightning storm"><span class="id">CASE 0009</span><span class="yr">2017</span></div>
+  <div class="meta">
+    <div class="row"><span>MAY 12 · GLOBAL · 150 COUNTRIES</span><span class="sep">/</span><span>Lazarus · EternalBlue</span><span class="tag ransom">RANSOMWARE</span></div>
+    <h3>WannaCry — the day the <i>NHS</i> went dark.</h3>
+    <p class="desc">A North-Korean-attributed worm, riding a leaked NSA exploit, swept across 200,000 machines in 150 countries inside a weekend. British hospitals turned away ambulances; Spanish telecoms went home early; a 22-year-old researcher named MalwareTech registered a domain on a whim and accidentally pulled the kill switch.</p>
+    <div class="stats">
+      <div><span class="k">Machines hit</span><span class="v">200k+</span></div>
+      <div><span class="k">Countries</span><span class="v">150</span></div>
+      <div><span class="k">Est. damage</span><span class="v">$4B</span></div>
+      <div><span class="k">Kill-switch</span><span class="v">1 domain</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Attribution<b>DPRK · LAZARUS</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="heist">
+  <div class="img"><img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=900&q=85" alt="vault coins"><span class="id">CASE 0008</span><span class="yr">2016</span></div>
+  <div class="meta">
+    <div class="row"><span>FEB 04 · DHAKA · BD → MANILA · PH</span><span class="sep">/</span><span>Lazarus</span><span class="tag heist">HEIST</span></div>
+    <h3>The Bangladesh Bank heist, undone by <i>a typo</i>.</h3>
+    <p class="desc">Attackers planted malware on the SWIFT terminal of Bangladesh's central bank and tried to wire <b>$951 million</b> from its Federal Reserve account into casinos in the Philippines. They got away with $81M — the rest was halted because the fifth transfer misspelled "foundation" as "fandation", and a routing bank decided to ask.</p>
+    <div class="stats">
+      <div><span class="k">Stolen</span><span class="v">$81M</span></div>
+      <div><span class="k">Attempted</span><span class="v">$951M</span></div>
+      <div><span class="k">Recovered</span><span class="v">$18M</span></div>
+      <div><span class="k">Saved by</span><span class="v">1 typo</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Attribution<b>DPRK · LAZARUS</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="state">
+  <div class="img"><img src="https://images.unsplash.com/photo-1614064548237-02f0e2b8b8a8?w=900&q=85" alt="ICS control panel"><span class="id">CASE 0007</span><span class="yr">2015</span></div>
+  <div class="meta">
+    <div class="row"><span>DEC 23 · IVANO-FRANKIVSK · UA</span><span class="sep">/</span><span>Sandworm · BlackEnergy</span><span class="tag state">STATE OP</span></div>
+    <h3>The first <i>blackout</i> caused by code.</h3>
+    <p class="desc">At 3:35pm on December 23rd, mouse cursors began moving on operator workstations at three Ukrainian regional electricity companies — operators watched, helpless, as breakers opened across <b>30 substations</b>. 230,000 people lost power on the shortest day of the year. It was the first documented cyberattack to take down a power grid.</p>
+    <div class="stats">
+      <div><span class="k">Affected</span><span class="v">230k</span></div>
+      <div><span class="k">Substations</span><span class="v">30</span></div>
+      <div><span class="k">Outage</span><span class="v">6 hrs</span></div>
+      <div><span class="k">Operators</span><span class="v">3</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Attribution<b>GRU · SANDWORM</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="breach">
+  <div class="img"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85" alt="dark mountain horizon"><span class="id">CASE 0006</span><span class="yr">2015</span></div>
+  <div class="meta">
+    <div class="row"><span>JUL 19 · TORONTO · CA</span><span class="sep">/</span><span>"The Impact Team"</span><span class="tag breach">BREACH</span></div>
+    <h3>Ashley Madison — <i>32 million</i> private confessions.</h3>
+    <p class="desc">A group calling itself The Impact Team gave Avid Life Media thirty days to take Ashley Madison offline. The company refused. On the deadline, the attackers dumped <b>9.7 GB</b> of customer records — emails, addresses, GPS coordinates, sexual preferences — onto the dark web. Two suicides were directly linked to the leak.</p>
+    <div class="stats">
+      <div><span class="k">Records</span><span class="v">32M</span></div>
+      <div><span class="k">Unique emails</span><span class="v">11M</span></div>
+      <div><span class="k">.gov / .mil</span><span class="v">15,000</span></div>
+      <div><span class="k">Suicides linked</span><span class="v">2</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Attribution<b>UNSOLVED</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="state">
+  <div class="img"><img src="https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=900&q=85" alt="dark sky"><span class="id">CASE 0005</span><span class="yr">2014</span></div>
+  <div class="meta">
+    <div class="row"><span>NOV 24 · CULVER CITY · US</span><span class="sep">/</span><span>"Guardians of Peace"</span><span class="tag state">STATE OP</span></div>
+    <h3>Sony Pictures — a <i>film studio</i> punished by a state.</h3>
+    <p class="desc">A group calling itself the Guardians of Peace wiped half of Sony Pictures' computers and exfiltrated roughly 100 terabytes — unreleased films, internal emails, executive salaries, and the social security numbers of 47,000 staff — in retaliation for a comedy about North Korea. The film was released anyway. The FBI named Pyongyang.</p>
+    <div class="stats">
+      <div><span class="k">Data lost</span><span class="v">100TB</span></div>
+      <div><span class="k">SSNs exposed</span><span class="v">47k</span></div>
+      <div><span class="k">Cleanup</span><span class="v">$15M</span></div>
+      <div><span class="k">Films leaked</span><span class="v">5</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Attribution<b>DPRK</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="takedown">
+  <div class="img"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=900&q=85" alt="keyboard at night"><span class="id">CASE 0004</span><span class="yr">2014</span></div>
+  <div class="meta">
+    <div class="row"><span>NOV 06 · 16 COUNTRIES</span><span class="sep">/</span><span>Op. ONYMOUS</span><span class="tag takedown">TAKEDOWN</span></div>
+    <h3>Operation Onymous — <i>410 onions</i>, one weekend.</h3>
+    <p class="desc">A coordinated push by the FBI, Europol, and eleven European agencies seized 410 hidden services in 48 hours — including <b>Silk Road 2.0</b>, Cloud 9, and Hydra (the original). Seventeen arrests, including the new Silk Road administrator who had taken over from Ross Ulbricht a year before, almost to the day.</p>
+    <div class="stats">
+      <div><span class="k">.onions seized</span><span class="v">410</span></div>
+      <div><span class="k">Arrests</span><span class="v">17</span></div>
+      <div><span class="k">Countries</span><span class="v">16</span></div>
+      <div><span class="k">BTC seized</span><span class="v">$1M</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Lead jurisdiction<b>EUROPOL · EC3</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="heist">
+  <div class="img"><img src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?w=900&q=85" alt="empty screen"><span class="id">CASE 0003</span><span class="yr">2014</span></div>
+  <div class="meta">
+    <div class="row"><span>FEB 28 · TOKYO · JP</span><span class="sep">/</span><span>Mt. Gox · "MtGoxFraud"</span><span class="tag heist">HEIST</span></div>
+    <h3>Mt. Gox — <i>850,000</i> bitcoin, missing.</h3>
+    <p class="desc">At its peak Mt. Gox handled 70% of all bitcoin trading on earth. Then, over years, attackers quietly drained its hot wallets while CEO Mark Karpelès kept rebalancing from cold storage to cover the holes. The 2014 collapse cost 24,750 creditors $450M — by 2024 prices, those coins would be worth more than $50B.</p>
+    <div class="stats">
+      <div><span class="k">BTC missing</span><span class="v">850k</span></div>
+      <div><span class="k">Value (2014)</span><span class="v">$450M</span></div>
+      <div><span class="k">Value (2024)</span><span class="v">~$50B</span></div>
+      <div><span class="k">Creditors</span><span class="v">24,750</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">CEO verdict<b>SUSPENDED</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="market">
+  <div class="img"><img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=900&q=85" alt="library shelves"><span class="id">CASE 0002</span><span class="yr">2013</span></div>
+  <div class="meta">
+    <div class="row"><span>OCT 01 · SAN FRANCISCO · US</span><span class="sep">/</span><span>"Dread Pirate Roberts"</span><span class="tag market">MARKETPLACE</span></div>
+    <h3>The Silk Road, sealed in a <i>library</i>.</h3>
+    <p class="desc">Ross Ulbricht was arrested at a corner desk in the science-fiction section of Glen Park Library, San Francisco — laptop open, logged in as root to the Silk Road admin panel. The first true dark-web marketplace had handled <b>1.2 million transactions</b> in just over two years. He is currently serving two consecutive life sentences.</p>
+    <div class="stats">
+      <div><span class="k">Users</span><span class="v">957k</span></div>
+      <div><span class="k">Lifetime GMV</span><span class="v">$1.2B</span></div>
+      <div><span class="k">Transactions</span><span class="v">1.2M</span></div>
+      <div><span class="k">Sentence</span><span class="v">2× LIFE</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge sealed"><span class="b"></span> Sealed</span>
+    <div class="meta-r">Verdict<b>USP TUCSON</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<article class="entry" data-type="state">
+  <div class="img"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=85" alt="circuit board"><span class="id">CASE 0001</span><span class="yr">2010</span></div>
+  <div class="meta">
+    <div class="row"><span>JUN 17 · NATANZ · IR</span><span class="sep">/</span><span>"Olympic Games"</span><span class="tag state">STATE OP</span></div>
+    <h3>Stuxnet — the first <i>weapon</i> made of code.</h3>
+    <p class="desc">A 500-kilobyte worm chained four zero-day vulnerabilities to reach an air-gapped Iranian enrichment facility, then quietly instructed the centrifuges to spin themselves to pieces while reporting normal telemetry to their operators. A thousand machines destroyed; nobody officially claimed it. Every nation-state cyber programme since has been measured against it.</p>
+    <div class="stats">
+      <div><span class="k">Zero-days</span><span class="v">4</span></div>
+      <div><span class="k">Centrifuges</span><span class="v">~1,000</span></div>
+      <div><span class="k">Payload size</span><span class="v">500KB</span></div>
+      <div><span class="k">Attribution</span><span class="v">UNCLAIMED</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span class="badge cold"><span class="b"></span> Cold</span>
+    <div class="meta-r">Suspected<b>US · IL</b></div>
+    <div class="open">Open file <span class="arr">→</span></div>
+  </div>
+</article>
+
+<!-- ENTRIES -->
+</section>
+
+<div class="no-results" id="empty">— NO FILES MATCH THE SELECTED CLASSIFICATION —</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="grid">
+    <div class="brand-blk">
+      <h5>null<b>/</b>sector</h5>
+      <p>"A reading room for the after-hours internet."</p>
+    </div>
+    <div class="col">
+      <h6>The Room</h6>
+      <ul>
+        <li><a href="index.html#index">Index</a></li>
+        <li><a href="index.html#operations">Operations</a></li>
+        <li><a href="index.html#dossiers">Dossiers</a></li>
+        <li><a href="index.html#archive">The Wire</a></li>
+        <li><a href="archive.html">Cold Archive</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h6>Comms</h6>
+      <ul>
+        <li><a href="#">PGP · 0xF7A2 9C4E</a></li>
+        <li><a href="#">.onion mirror</a></li>
+        <li><a href="#">SecureDrop</a></li>
+        <li><a href="#">Signal · +44 …</a></li>
+        <li><a href="#">Dead drop map</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h6>Canary</h6>
+      <ul>
+        <li><a href="#">Week 24 · all clear</a></li>
+        <li><a href="#">Warrant log</a></li>
+        <li><a href="#">Transparency</a></li>
+        <li><a href="#">Editorial policy</a></li>
+        <li><a href="#">Threat model</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bot">
+    <span>© 2026 NULL/SECTOR · NO RIGHTS RESERVED · MIRROR FREELY</span>
+    <pre class="ascii">  ┌─[ N / S ]─┐
+  │  0xF7A2   │
+  └───────────┘</pre>
+    <span>VAULT 0xC7 · 021 FILES · LAST SEAL 04:00 UTC</span>
+  </div>
+</footer>
+
+<script>
+// custom cursor
+const c = document.getElementById('cursor');
+addEventListener('mousemove', e => { c.style.left = e.clientX+'px'; c.style.top = e.clientY+'px'; });
+const wireCursor = () => document.querySelectorAll('a,button,.entry').forEach(el=>{
+  el.onmouseenter = ()=>{c.style.width='28px';c.style.height='28px';c.style.background='transparent';c.style.border='1px solid #c8ff00';c.style.boxShadow='0 0 16px rgba(200,255,0,.6)';};
+  el.onmouseleave = ()=>{c.style.width='8px';c.style.height='8px';c.style.background='#c8ff00';c.style.border='0';c.style.boxShadow='0 0 12px #c8ff00';};
+});
+
+// live clock
+const status = document.querySelector('.statusbar .pulse');
+setInterval(()=>{
+  const d = new Date();
+  const t = d.toUTCString().slice(17,25);
+  if(status) status.innerHTML = '<span class="dot"></span> COLD ROOM · TEMP -18°C · '+t+' UTC';
+},1000);
+
+// filter
+const buttons = document.querySelectorAll('.filterbar button');
+const empty = document.getElementById('empty');
+buttons.forEach(b => b.addEventListener('click', () => {
+  buttons.forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  const f = b.dataset.f;
+  let shown = 0;
+  document.querySelectorAll('.entry').forEach(e => {
+    const match = f === 'all' || e.dataset.type === f;
+    e.classList.toggle('hide', !match);
+    if (match) shown++;
+  });
+  empty.classList.toggle('show', shown === 0);
+}));
+
+wireCursor();
+</script>
+</body>
+</html>
