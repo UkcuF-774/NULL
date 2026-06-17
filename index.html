@@ -19,7 +19,11 @@
   --line:rgba(230,226,214,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 html,body{background:var(--ink);color:var(--bone);font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+section[id]{scroll-margin-top:90px}
+nav.main ul li a.active{color:var(--bone)}
+nav.main ul li a.active::after{transform:scaleX(1)}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
@@ -281,22 +285,22 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 
 <!-- NAV -->
 <nav class="main">
-  <div class="brand">null<b>/</b>sector</div>
+  <a href="#index" class="brand">null<b>/</b>sector</a>
   <ul>
-    <li><a href="#">Index</a></li>
-    <li><a href="#">Operations</a></li>
-    <li><a href="#">Dossiers</a></li>
-    <li><a href="#">Archive</a></li>
-    <li><a href="#">Signal</a></li>
+    <li><a href="#index">Index</a></li>
+    <li><a href="#operations">Operations</a></li>
+    <li><a href="#dossiers">Dossiers</a></li>
+    <li><a href="#archive">Archive</a></li>
+    <li><a href="#signal">Signal</a></li>
   </ul>
   <div class="auth">
     <span class="key">[PGP&nbsp;0xF7A2]</span>
-    <a href="#" class="enter">Enter →</a>
+    <a href="#index" class="enter">Enter →</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="index">
   <span class="meta-left">VOL.07 — ISSUE 042 — ENCRYPTED INDEX — DO NOT FORWARD</span>
 
   <div class="left">
@@ -311,8 +315,8 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
       A reading room for the <strong>after-hours internet</strong>. We collect the leaks, the long-form, the half-deleted threads, and the slow-burning investigations that the daylight web forgets by morning. <strong>No tracking. No telemetry. No daylight.</strong>
     </p>
     <div class="ctas">
-      <a class="btn primary" href="#">Open the index <span class="arr">→</span></a>
-      <a class="btn ghost" href="#">Subscribe via PGP</a>
+      <a class="btn primary" href="#operations">Open the index <span class="arr">→</span></a>
+      <a class="btn ghost" href="#signal">Subscribe via PGP</a>
     </div>
   </div>
 
@@ -371,7 +375,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 </section>
 
 <!-- OPERATIONS -->
-<section class="ops">
+<section class="ops" id="operations">
   <div class="head">
     <h3>Field <em>operations</em>,<br>filed in the <em>dark</em>.</h3>
     <div class="key">Indexed dispatches<b>042 / 144</b></div>
@@ -379,7 +383,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
   <div class="opgrid">
 
     <a class="op a" href="#">
-      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=2200&q=85" alt="cables" />
+      <img src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=2200&q=85" alt="dark deep ocean" />
       <div class="veil">
         <div class="top"><span class="id">OP — 037</span><span>BERLIN · BRUSSELS</span></div>
         <div>
@@ -434,7 +438,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
     </a>
 
     <a class="op f" href="#">
-      <img src="https://images.unsplash.com/photo-1495592528490-2147a7b1ff61?w=1400&q=85" alt="static glow" />
+      <img src="https://images.unsplash.com/photo-1493514789931-586cb221d7a7?w=1400&q=85" alt="dark corridor with red light" />
       <div class="veil">
         <div class="top"><span class="id">OP — 042</span><span>NEW</span></div>
         <div>
@@ -448,7 +452,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 </section>
 
 <!-- TERMINAL -->
-<section class="terminal">
+<section class="terminal" id="archive">
   <div class="left">
     <div style="font-size:10px;letter-spacing:.3em;color:var(--blood);text-transform:uppercase;margin-bottom:16px">02 — The Wire</div>
     <h3>A <b>live wire</b><br>into the<br><i>under-net.</i></h3>
@@ -486,7 +490,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 </section>
 
 <!-- DOSSIERS -->
-<section class="dossiers">
+<section class="dossiers" id="dossiers">
   <div class="head">
     <h3>The <span class="s">people</span> who whisper<br>through the wire.</h3>
     <div class="leg">Faces obscured by request. Identities held in escrow with a Swiss notary and released only on event of confirmed harm.</div>
@@ -530,7 +534,7 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 </section>
 
 <!-- SIGNAL -->
-<section class="signal">
+<section class="signal" id="signal">
   <div class="inner">
     <div class="pre">— 03 · Signal —</div>
     <h2>If you have <i>nothing</i><br>to say <span class="stroke">safely</span>,<br>say it <i>here</i>.</h2>
@@ -552,11 +556,11 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
     <div class="col">
       <h6>The Room</h6>
       <ul>
-        <li><a href="#">Index</a></li>
-        <li><a href="#">Operations</a></li>
-        <li><a href="#">Dossiers</a></li>
-        <li><a href="#">The Wire</a></li>
-        <li><a href="#">Cold Archive</a></li>
+        <li><a href="#index">Index</a></li>
+        <li><a href="#operations">Operations</a></li>
+        <li><a href="#dossiers">Dossiers</a></li>
+        <li><a href="#archive">The Wire</a></li>
+        <li><a href="#signal">Cold Archive</a></li>
       </ul>
     </div>
     <div class="col">
@@ -605,6 +609,18 @@ setInterval(()=>{
   const t = d.toUTCString().slice(17,25);
   if(status) status.innerHTML = '<span class="dot"></span> LIVE FEED '+t+' UTC';
 },1000);
+
+// scroll-spy: highlight active nav item
+const navLinks = document.querySelectorAll('nav.main ul li a[href^="#"]');
+const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy = () => {
+  const y = scrollY + 140;
+  let cur = sections[0];
+  sections.forEach(s => { if (s && s.offsetTop <= y) cur = s; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + (cur && cur.id)));
+};
+addEventListener('scroll', spy, {passive:true});
+spy();
 </script>
 </body>
 </html>
