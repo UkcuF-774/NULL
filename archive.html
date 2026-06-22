@@ -150,21 +150,78 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 
 @media (max-width:1100px){
   .entry{grid-template-columns:200px 1fr}
-  .entry .status{grid-column:1 / -1;flex-direction:row;align-items:center;border-top:1px solid var(--line);padding:18px 22px}
+  .entry .status{grid-column:1 / -1;flex-direction:row;align-items:center;border-top:1px solid var(--line);padding:18px 22px;gap:18px;flex-wrap:wrap}
   .entry .status .meta-r{display:none}
   .entry .status .open{border:0;padding:0;margin-left:auto}
-}
-@media (max-width:760px){
-  .arc-hero .inner{grid-template-columns:1fr;gap:30px}
+  .arc-hero .inner{grid-template-columns:1fr;gap:34px}
   .stats-strip{grid-template-columns:1fr 1fr}
   .stats-strip .s:nth-child(2){border-right:0}
   .stats-strip .s:nth-child(1),.stats-strip .s:nth-child(2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:760px){
+  .arc-hero{padding:130px 14px 50px;min-height:auto}
+  .arc-hero h1{font-size:clamp(56px,16vw,120px)}
+  .stats-strip .s{padding:22px 18px}
+  .stats-strip .s .v{font-size:30px}
   .entry{grid-template-columns:1fr}
   .entry .img{min-height:200px;border-right:0;border-bottom:1px solid var(--line)}
-  .entry .meta{border-right:0}
+  .entry .meta{border-right:0;padding:24px 18px}
+  .entry h3{font-size:28px}
+  .entry .status{padding:16px 18px}
+  .archive-list{padding:0 14px 70px}
+  .filterbar{padding:10px 14px}
+  .filterbar .lbl{margin-right:8px}
+  .filterbar button{padding:8px 11px;font-size:10px;margin:3px 4px 3px 0}
   nav.main{grid-template-columns:1fr 1fr;gap:10px}
   nav.main ul{display:none}
   footer .grid{grid-template-columns:1fr 1fr}
+}
+
+/* ============ RESPONSIVE OVERLAP FIXES ============ */
+.statusbar{flex-wrap:wrap;gap:6px 18px}
+.statusbar .l,.statusbar .r{flex-wrap:wrap;gap:6px 14px}
+nav.main .auth{flex-wrap:wrap;gap:8px 14px;justify-content:flex-end}
+.filterbar{flex-wrap:wrap}
+.filterbar .right{margin-left:auto;flex-wrap:wrap}
+.entry .meta .row{flex-wrap:wrap;gap:8px 14px}
+.entry .meta .tag{margin-left:0}
+.entry .stats{gap:18px 24px}
+
+/* big tablet — collapse hero earlier, stack stats 2x2 sooner, stack footer */
+@media (max-width:1280px){
+  .arc-hero{padding:140px 22px 60px;min-height:56vh}
+  .arc-hero .inner{grid-template-columns:1fr;gap:34px}
+  footer .grid{grid-template-columns:1fr 1fr;gap:34px}
+}
+
+/* mid tablet — squeeze nav, simplify filter bar */
+@media (max-width:900px){
+  nav.main{grid-template-columns:auto 1fr auto;gap:12px;padding:14px}
+  nav.main ul{display:none}
+  nav.main .auth .key{display:none}
+  .filterbar .right{margin-left:0;width:100%;padding-top:8px;margin-top:6px;border-top:1px solid var(--line)}
+}
+
+/* mobile — collapse fully, shrink everything that could overflow */
+@media (max-width:620px){
+  .statusbar{padding:8px 14px;font-size:9.5px}
+  .statusbar .l>span:nth-child(n+3),.statusbar .r>span:nth-child(n+2){display:none}
+  nav.main{top:44px;padding:12px 14px}
+  nav.main .brand{font-size:15px}
+  nav.main .auth .enter{padding:8px 12px;font-size:10px}
+  .arc-hero{padding:120px 14px 40px}
+  .arc-hero h1{font-size:clamp(48px,15vw,96px)}
+  .arc-hero .crumb{flex-wrap:wrap}
+  .stats-strip{grid-template-columns:1fr 1fr}
+  .stats-strip .s .v{font-size:26px}
+  .entry .stats{gap:12px 18px}
+  .entry .stats div{min-width:72px}
+  .entry .stats .v{font-size:15px}
+  .entry h3{font-size:24px}
+  footer{padding:60px 14px 24px}
+  footer .grid{grid-template-columns:1fr;gap:28px;padding-bottom:40px}
+  footer .bot{font-size:9.5px}
+  footer .bot .ascii{display:none}
 }
 </style>
 </head>
@@ -249,11 +306,11 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
 <div class="filterbar" id="filterbar">
   <span class="lbl">▼ Filter</span>
   <button class="on" data-f="all">All <span class="ct">21</span></button>
-  <button data-f="market">Marketplace <span class="ct">03</span></button>
-  <button data-f="takedown">Takedown <span class="ct">03</span></button>
-  <button data-f="ransom">Ransomware <span class="ct">04</span></button>
+  <button data-f="market">Marketplace <span class="ct">01</span></button>
+  <button data-f="takedown">Takedown <span class="ct">04</span></button>
+  <button data-f="ransom">Ransomware <span class="ct">03</span></button>
   <button data-f="breach">Breach <span class="ct">04</span></button>
-  <button data-f="state">State-Op <span class="ct">04</span></button>
+  <button data-f="state">State-Op <span class="ct">05</span></button>
   <button data-f="heist">Heist <span class="ct">02</span></button>
   <button data-f="extort">Extortion <span class="ct">02</span></button>
   <div class="right"><span>Sort · <b>most recent</b></span></div>
@@ -751,15 +808,25 @@ setInterval(()=>{
   if(status) status.innerHTML = '<span class="dot"></span> COLD ROOM · TEMP -18°C · '+t+' UTC';
 },1000);
 
-// filter
+// filter + auto count
 const buttons = document.querySelectorAll('.filterbar button');
 const empty = document.getElementById('empty');
+const entries = document.querySelectorAll('.entry');
+
+// recompute counts from actual entries
+const counts = {all: entries.length};
+entries.forEach(e => { const t = e.dataset.type; counts[t] = (counts[t]||0) + 1; });
+buttons.forEach(b => {
+  const ct = b.querySelector('.ct');
+  if (ct) ct.textContent = String(counts[b.dataset.f] || 0).padStart(2,'0');
+});
+
 buttons.forEach(b => b.addEventListener('click', () => {
   buttons.forEach(x => x.classList.remove('on'));
   b.classList.add('on');
   const f = b.dataset.f;
   let shown = 0;
-  document.querySelectorAll('.entry').forEach(e => {
+  entries.forEach(e => {
     const match = f === 'all' || e.dataset.type === f;
     e.classList.toggle('hide', !match);
     if (match) shown++;
