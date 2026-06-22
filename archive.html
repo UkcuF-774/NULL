@@ -153,56 +153,34 @@ footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-hei
   .entry .status{grid-column:1 / -1;flex-direction:row;align-items:center;border-top:1px solid var(--line);padding:18px 22px;gap:18px;flex-wrap:wrap}
   .entry .status .meta-r{display:none}
   .entry .status .open{border:0;padding:0;margin-left:auto}
-  .arc-hero .inner{grid-template-columns:1fr;gap:34px}
+}
+@media (max-width:760px){
+  .arc-hero .inner{grid-template-columns:1fr;gap:30px}
   .stats-strip{grid-template-columns:1fr 1fr}
   .stats-strip .s:nth-child(2){border-right:0}
   .stats-strip .s:nth-child(1),.stats-strip .s:nth-child(2){border-bottom:1px solid var(--line)}
-}
-@media (max-width:760px){
-  .arc-hero{padding:130px 14px 50px;min-height:auto}
-  .arc-hero h1{font-size:clamp(56px,16vw,120px)}
-  .stats-strip .s{padding:22px 18px}
-  .stats-strip .s .v{font-size:30px}
   .entry{grid-template-columns:1fr}
   .entry .img{min-height:200px;border-right:0;border-bottom:1px solid var(--line)}
-  .entry .meta{border-right:0;padding:24px 18px}
-  .entry h3{font-size:28px}
-  .entry .status{padding:16px 18px}
-  .archive-list{padding:0 14px 70px}
-  .filterbar{padding:10px 14px}
-  .filterbar .lbl{margin-right:8px}
-  .filterbar button{padding:8px 11px;font-size:10px;margin:3px 4px 3px 0}
+  .entry .meta{border-right:0}
   nav.main{grid-template-columns:1fr 1fr;gap:10px}
   nav.main ul{display:none}
   footer .grid{grid-template-columns:1fr 1fr}
 }
 
-/* ============ RESPONSIVE OVERLAP FIXES ============ */
-.statusbar{flex-wrap:wrap;gap:6px 18px}
-.statusbar .l,.statusbar .r{flex-wrap:wrap;gap:6px 14px}
-nav.main .auth{flex-wrap:wrap;gap:8px 14px;justify-content:flex-end}
-.filterbar{flex-wrap:wrap}
-.filterbar .right{margin-left:auto;flex-wrap:wrap}
-.entry .meta .row{flex-wrap:wrap;gap:8px 14px}
-.entry .meta .tag{margin-left:0}
-.entry .stats{gap:18px 24px}
-
-/* big tablet — collapse hero earlier, stack stats 2x2 sooner, stack footer */
-@media (max-width:1280px){
-  .arc-hero{padding:140px 22px 60px;min-height:56vh}
-  .arc-hero .inner{grid-template-columns:1fr;gap:34px}
-  footer .grid{grid-template-columns:1fr 1fr;gap:34px}
-}
-
-/* mid tablet — squeeze nav, simplify filter bar */
+/* tablet — wrap statusbar + nav auth + filter row so they stop colliding */
 @media (max-width:900px){
-  nav.main{grid-template-columns:auto 1fr auto;gap:12px;padding:14px}
-  nav.main ul{display:none}
+  .statusbar{flex-wrap:wrap;gap:6px 16px}
+  .statusbar .l,.statusbar .r{flex-wrap:wrap;gap:6px 14px}
+  nav.main{top:62px}
+  nav.main .auth{flex-wrap:wrap;gap:8px 12px;justify-content:flex-end}
   nav.main .auth .key{display:none}
+  .filterbar{flex-wrap:wrap}
   .filterbar .right{margin-left:0;width:100%;padding-top:8px;margin-top:6px;border-top:1px solid var(--line)}
+  .entry .meta .row{flex-wrap:wrap;gap:8px 14px}
+  .entry .meta .tag{margin-left:0}
 }
 
-/* mobile — collapse fully, shrink everything that could overflow */
+/* mobile — hide non-essential statusbar items, shrink hero */
 @media (max-width:620px){
   .statusbar{padding:8px 14px;font-size:9.5px}
   .statusbar .l>span:nth-child(n+3),.statusbar .r>span:nth-child(n+2){display:none}
@@ -212,15 +190,19 @@ nav.main .auth{flex-wrap:wrap;gap:8px 14px;justify-content:flex-end}
   .arc-hero{padding:120px 14px 40px}
   .arc-hero h1{font-size:clamp(48px,15vw,96px)}
   .arc-hero .crumb{flex-wrap:wrap}
-  .stats-strip{grid-template-columns:1fr 1fr}
+  .stats-strip .s{padding:22px 18px}
   .stats-strip .s .v{font-size:26px}
+  .archive-list{padding:0 14px 70px}
+  .filterbar{padding:10px 14px}
+  .filterbar button{padding:8px 11px;font-size:10px;margin:3px 4px 3px 0}
+  .entry .meta{padding:24px 18px}
+  .entry h3{font-size:24px}
   .entry .stats{gap:12px 18px}
   .entry .stats div{min-width:72px}
   .entry .stats .v{font-size:15px}
-  .entry h3{font-size:24px}
+  .entry .status{padding:16px 18px}
   footer{padding:60px 14px 24px}
-  footer .grid{grid-template-columns:1fr;gap:28px;padding-bottom:40px}
-  footer .bot{font-size:9.5px}
+  footer .grid{grid-template-columns:1fr;gap:28px}
   footer .bot .ascii{display:none}
 }
 </style>
