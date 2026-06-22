@@ -1,3 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NULL/SECTOR — ENCRYPTED INDEX 0xF7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,600&family=JetBrains+Mono:wght@300;400;600&family=Major+Mono+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#050505;
+  --paper:#0a0a0a;
+  --bone:#e6e2d6;
+  --ash:#7a7872;
+  --blood:#ff2a2a;
+  --acid:#c8ff00;
+  --halo:#00f0ff;
+  --line:rgba(230,226,214,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{background:var(--ink);color:var(--bone);font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+section[id]{scroll-margin-top:90px}
+nav.main ul li a.active{color:var(--bone)}
+nav.main ul li a.active::after{transform:scaleX(1)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* GRAIN + SCANLINES */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:90;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.88 0 0 0 0 0.82 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity:.35;mix-blend-mode:overlay;
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:91;
+  background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(0,0,0,.25) 3px 4px);
+  mix-blend-mode:multiply;opacity:.5;
+}
+
+/* CURSOR DOT */
+.cursor{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--acid);box-shadow:0 0 12px var(--acid);pointer-events:none;z-index:100;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s,box-shadow .2s;mix-blend-mode:difference}
+
+/* TOP STATUS BAR */
+.statusbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 22px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.4));
+  backdrop-filter:blur(6px);
+}
+.statusbar .l,.statusbar .r{display:flex;gap:18px;align-items:center;color:var(--ash)}
+.statusbar .pulse{display:inline-flex;align-items:center;gap:8px;color:var(--bone)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--blood);box-shadow:0 0 8px var(--blood);animation:blink 1.4s infinite}
+@keyframes blink{0%,60%{opacity:1}70%,100%{opacity:.15}}
+
+/* NAV */
+nav.main{
+  position:fixed;top:34px;left:0;right:0;z-index:49;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:18px 22px;
+}
+nav.main .brand{font-family:"Major Mono Display",monospace;font-size:18px;letter-spacing:.05em}
+nav.main .brand b{color:var(--blood);font-weight:400}
+nav.main ul{display:flex;gap:30px;justify-content:center;list-style:none;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+nav.main ul li a{position:relative;padding:6px 0;transition:color .3s}
+nav.main ul li a:hover{color:var(--bone)}
+nav.main ul li a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--acid);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+nav.main ul li a:hover::after{transform:scaleX(1)}
+nav.main .auth{justify-self:end;display:flex;gap:14px;align-items:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+nav.main .auth .key{color:var(--acid)}
+nav.main .auth .enter{border:1px solid var(--bone);padding:9px 16px;transition:.3s}
+nav.main .auth .enter:hover{background:var(--bone);color:var(--ink)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;padding:140px 22px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end;border-bottom:1px solid var(--line)}
+.hero .meta-left{position:absolute;left:22px;top:140px;font-size:10px;letter-spacing:.2em;color:var(--ash);writing-mode:vertical-rl;transform:rotate(180deg)}
+
+.hero h1{
+  font-family:"Fraunces",serif;font-weight:300;font-style:italic;
+  font-size:clamp(72px,12vw,200px);line-height:.86;letter-spacing:-.03em;
+  color:var(--bone);
+}
+.hero h1 .stroke{-webkit-text-stroke:1px var(--bone);color:transparent;font-style:normal;font-weight:600}
+.hero h1 .red{color:var(--blood);font-style:normal;font-weight:600;display:inline-block;transform:translateY(.04em)}
+.hero h1 .redact{display:inline-block;background:var(--bone);color:var(--bone);padding:0 .15em;border-radius:2px;user-select:none}
+.hero h1 .redact:hover{background:transparent;color:var(--bone);transition:background .2s}
+
+.hero .left{display:flex;flex-direction:column;gap:32px;padding-left:38px}
+.hero .tag{display:flex;align-items:center;gap:14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+.hero .tag span.line{flex:1;max-width:90px;height:1px;background:var(--ash)}
+.hero .tag em{color:var(--acid);font-style:normal}
+
+.hero .lede{max-width:480px;font-size:13px;line-height:1.7;color:#bdbab0;padding-left:38px}
+.hero .lede strong{color:var(--bone);font-weight:600}
+
+.hero .ctas{display:flex;gap:16px;padding-left:38px;align-items:center}
+.hero .ctas .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border:1px solid var(--bone);font-size:11px;letter-spacing:.25em;text-transform:uppercase;transition:.3s;background:transparent;cursor:none}
+.hero .ctas .btn.primary{background:var(--bone);color:var(--ink)}
+.hero .ctas .btn.primary:hover{background:var(--blood);color:var(--bone);border-color:var(--blood)}
+.hero .ctas .btn.ghost:hover{background:var(--bone);color:var(--ink)}
+.hero .ctas .arr{display:inline-block;transition:transform .3s}
+.hero .ctas .btn:hover .arr{transform:translateX(4px)}
+
+/* RIGHT — IMAGE STACK */
+.hero .right{position:relative;height:78vh;min-height:540px}
+.hero .frame{position:absolute;overflow:hidden;border:1px solid var(--line)}
+.hero .frame img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) contrast(1.15) brightness(.78)}
+.hero .frame.main{inset:0 0 0 12%;}
+.hero .frame.acc{width:48%;height:34%;right:-2%;bottom:-2%;border:1px solid var(--blood)}
+.hero .frame.acc img{filter:grayscale(0) contrast(1.2) saturate(1.3)}
+.hero .frame .label{position:absolute;top:10px;left:12px;font-size:10px;letter-spacing:.25em;color:var(--bone);background:rgba(0,0,0,.6);padding:4px 8px;border:1px solid var(--line)}
+.hero .frame .coord{position:absolute;bottom:10px;right:12px;font-size:10px;letter-spacing:.2em;color:var(--bone);background:rgba(0,0,0,.6);padding:4px 8px}
+.hero .frame .crosshair{position:absolute;top:50%;left:50%;width:60px;height:60px;transform:translate(-50%,-50%);pointer-events:none;opacity:.7}
+.hero .frame .crosshair::before,.hero .frame .crosshair::after{content:"";position:absolute;background:var(--acid)}
+.hero .frame .crosshair::before{top:50%;left:0;right:0;height:1px}
+.hero .frame .crosshair::after{left:50%;top:0;bottom:0;width:1px}
+
+.hero .corner{position:absolute;width:14px;height:14px;border:1px solid var(--blood);z-index:5}
+.hero .c1{top:0;left:0;border-right:0;border-bottom:0}
+.hero .c2{top:0;right:0;border-left:0;border-bottom:0}
+.hero .c3{bottom:0;left:0;border-right:0;border-top:0}
+.hero .c4{bottom:0;right:0;border-left:0;border-top:0}
+
+/* MARQUEE */
+.marquee{border-bottom:1px solid var(--line);overflow:hidden;background:#080808}
+.marquee .track{display:flex;gap:60px;padding:14px 0;animation:slide 38s linear infinite;white-space:nowrap;font-size:12px;letter-spacing:.32em;color:var(--ash);text-transform:uppercase}
+.marquee .track span b{color:var(--blood);font-weight:400;margin-right:8px}
+.marquee .track span em{color:var(--acid);font-style:normal;margin-left:8px}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* MANIFESTO */
+.manifesto{padding:120px 22px;display:grid;grid-template-columns:.45fr 1fr;gap:60px;border-bottom:1px solid var(--line);position:relative}
+.manifesto .label{font-size:10px;letter-spacing:.3em;color:var(--ash);text-transform:uppercase;padding-top:14px;border-top:1px solid var(--bone);display:flex;justify-content:space-between;max-width:280px}
+.manifesto .label span:last-child{color:var(--blood)}
+.manifesto h2{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(36px,5.4vw,86px);line-height:1.02;letter-spacing:-.02em;color:var(--bone);max-width:14ch}
+.manifesto h2 i{color:var(--blood);font-style:italic;font-weight:300}
+.manifesto h2 .u{border-bottom:2px solid var(--acid);padding-bottom:.04em}
+.manifesto .body{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:40px;font-size:13px;line-height:1.8;color:#b8b5ab;max-width:760px}
+.manifesto .body p::first-line{color:var(--bone)}
+
+/* OPERATIONS GRID */
+.ops{padding:120px 22px;border-bottom:1px solid var(--line)}
+.ops .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:50px;gap:30px;flex-wrap:wrap}
+.ops .head h3{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(40px,6vw,84px);line-height:.95;letter-spacing:-.02em}
+.ops .head h3 em{font-style:italic;color:var(--blood)}
+.ops .head .key{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--ash);text-align:right}
+.ops .head .key b{display:block;color:var(--bone);font-weight:400;font-size:38px;font-family:"Major Mono Display",monospace;letter-spacing:.02em;margin-top:6px}
+
+.opgrid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:140px;gap:14px}
+.op{position:relative;overflow:hidden;border:1px solid var(--line);background:#0c0c0c;transition:transform .5s,border-color .3s;cursor:none}
+.op img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) contrast(1.2) brightness(.7);transition:transform 1.2s cubic-bezier(.2,.7,.2,1),filter .5s}
+.op:hover{border-color:var(--blood)}
+.op:hover img{transform:scale(1.08);filter:grayscale(0) contrast(1.3) brightness(.9)}
+.op .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 30%,rgba(5,5,5,.95));padding:18px;display:flex;flex-direction:column;justify-content:space-between}
+.op .veil .top{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.2em;color:var(--bone)}
+.op .veil .top .id{color:var(--acid)}
+.op .veil h4{font-family:"Fraunces",serif;font-weight:300;font-size:28px;line-height:1.05;letter-spacing:-.01em;color:var(--bone);max-width:14ch}
+.op .veil h4 i{color:var(--blood);font-style:italic}
+.op .veil .row{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+.op .veil .row .arr{color:var(--bone);font-size:14px;transition:transform .3s}
+.op:hover .veil .row .arr{transform:translateX(8px);color:var(--acid)}
+
+.op.a{grid-column:span 7;grid-row:span 3}
+.op.b{grid-column:span 5;grid-row:span 2}
+.op.c{grid-column:span 5;grid-row:span 2}
+.op.d{grid-column:span 4;grid-row:span 2}
+.op.e{grid-column:span 4;grid-row:span 2}
+.op.f{grid-column:span 4;grid-row:span 2}
+
+/* TERMINAL */
+.terminal{padding:120px 22px;display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center;border-bottom:1px solid var(--line);background:radial-gradient(circle at 30% 50%,#0d0d0d,#040404 70%)}
+.terminal .left h3{font-family:"Fraunces",serif;font-weight:300;font-style:italic;font-size:clamp(38px,5vw,72px);line-height:1;letter-spacing:-.02em;margin-bottom:24px}
+.terminal .left h3 b{font-style:normal;font-weight:600;color:var(--acid)}
+.terminal .left p{max-width:42ch;color:#b8b5ab;font-size:13px;line-height:1.8;margin-bottom:30px}
+.terminal .left .specs{display:grid;grid-template-columns:1fr 1fr;gap:18px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+.terminal .left .specs div{padding:14px;border:1px solid var(--line)}
+.terminal .left .specs div b{display:block;color:var(--bone);font-weight:600;font-size:22px;font-family:"Major Mono Display",monospace;margin-top:6px;letter-spacing:0}
+
+.term-window{background:#070707;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(200,255,0,.05) inset}
+.term-window .bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:10px;letter-spacing:.22em;color:var(--ash);text-transform:uppercase}
+.term-window .bar .d{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.term-window .bar .d.r{background:var(--blood)}
+.term-window .bar .d.y{background:#ffb800}
+.term-window .bar .d.g{background:var(--acid)}
+.term-window .bar .path{margin-left:auto;color:var(--bone)}
+.term-window pre{padding:22px;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.7;color:#d0ccc1;white-space:pre-wrap}
+.term-window pre .p{color:var(--acid)}
+.term-window pre .c{color:#6a685f}
+.term-window pre .w{color:#ffb800}
+.term-window pre .r{color:var(--blood)}
+.term-window pre .h{color:var(--halo)}
+.term-window pre .b{color:var(--bone)}
+.term-window pre .cursor-blink{display:inline-block;width:8px;height:14px;background:var(--acid);margin-left:2px;vertical-align:-3px;animation:cb 1s steps(2) infinite}
+@keyframes cb{50%{opacity:0}}
+
+/* DOSSIERS */
+.dossiers{padding:120px 22px;border-bottom:1px solid var(--line)}
+.dossiers .head{display:flex;justify-content:space-between;align-items:end;margin-bottom:60px;gap:30px;flex-wrap:wrap}
+.dossiers .head h3{font-family:"Fraunces",serif;font-style:italic;font-weight:300;font-size:clamp(36px,5vw,72px);letter-spacing:-.02em;line-height:.95;max-width:14ch}
+.dossiers .head h3 .s{font-style:normal;-webkit-text-stroke:1px var(--bone);color:transparent;font-weight:600}
+.dossiers .head .leg{font-size:10.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--ash);max-width:36ch;text-align:right;line-height:1.8}
+
+.doss{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--bone)}
+.doss article{padding:30px 26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:20px;background:#070707;transition:background .4s}
+.doss article:hover{background:#0e0e0e}
+.doss article:nth-child(3n){border-right:0}
+.doss .hdr{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.25em;color:var(--ash);text-transform:uppercase}
+.doss .hdr b{color:var(--blood);font-weight:400}
+.doss .portrait{position:relative;aspect-ratio:1/1;overflow:hidden;border:1px solid var(--line)}
+.doss .portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.3) brightness(.75);transition:filter .6s}
+.doss article:hover .portrait img{filter:grayscale(0) contrast(1.2)}
+.doss .portrait::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.4) 2px 3px);mix-blend-mode:multiply;pointer-events:none}
+.doss .portrait .id{position:absolute;top:8px;left:8px;font-size:9px;letter-spacing:.22em;color:var(--bone);background:rgba(0,0,0,.6);padding:3px 6px}
+.doss h4{font-family:"Fraunces",serif;font-weight:400;font-size:26px;line-height:1.1;letter-spacing:-.01em}
+.doss h4 .blk{display:inline-block;background:var(--bone);color:transparent;padding:0 .2em;user-select:none}
+.doss p{font-size:11.5px;color:#aba89e;line-height:1.7}
+.doss .foot{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.22em;color:var(--ash);text-transform:uppercase;padding-top:14px;border-top:1px dashed var(--line)}
+.doss .foot .stat{color:var(--acid)}
+
+/* SIGNAL / CTA */
+.signal{padding:140px 22px;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.signal::before{content:"";position:absolute;inset:0;background-image:url("https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=2400&q=80");background-size:cover;background-position:center;opacity:.18;filter:grayscale(.5) contrast(1.4)}
+.signal::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(5,5,5,.4),var(--ink) 75%)}
+.signal .inner{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:34px}
+.signal .pre{font-size:11px;letter-spacing:.4em;color:var(--blood);text-transform:uppercase}
+.signal h2{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(56px,10vw,160px);line-height:.92;letter-spacing:-.03em;max-width:14ch}
+.signal h2 i{font-style:italic;color:var(--bone)}
+.signal h2 .stroke{-webkit-text-stroke:1px var(--bone);color:transparent;font-weight:600;font-style:normal}
+.signal .form{display:flex;align-items:center;gap:0;background:#0a0a0a;border:1px solid var(--bone);max-width:620px;width:100%}
+.signal .form input{flex:1;background:transparent;border:0;color:var(--bone);font-family:"JetBrains Mono",monospace;font-size:13px;padding:18px 22px;letter-spacing:.1em;outline:none}
+.signal .form input::placeholder{color:var(--ash);text-transform:uppercase;letter-spacing:.2em;font-size:11px}
+.signal .form button{background:var(--bone);color:var(--ink);border:0;padding:18px 28px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;cursor:none;transition:.3s}
+.signal .form button:hover{background:var(--blood);color:var(--bone)}
+.signal .fine{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--ash);max-width:48ch;line-height:1.8}
+
+/* FOOTER */
+footer{padding:80px 22px 30px;background:#040404;color:var(--ash);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+footer .grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:60px;border-bottom:1px solid var(--line)}
+footer .brand-blk h5{font-family:"Major Mono Display",monospace;font-size:32px;color:var(--bone);letter-spacing:.04em;margin-bottom:14px}
+footer .brand-blk h5 b{color:var(--blood);font-weight:400}
+footer .brand-blk p{font-family:"Fraunces",serif;font-style:italic;font-size:14px;letter-spacing:0;text-transform:none;color:#b8b5ab;line-height:1.6;max-width:36ch}
+footer .col h6{color:var(--bone);font-size:11px;letter-spacing:.3em;margin-bottom:18px;font-weight:400}
+footer .col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+footer .col ul li a{transition:color .3s}
+footer .col ul li a:hover{color:var(--acid)}
+footer .bot{display:flex;justify-content:space-between;align-items:center;padding-top:24px;gap:20px;flex-wrap:wrap}
+footer .bot .ascii{font-family:"JetBrains Mono",monospace;font-size:8px;line-height:1;color:#2a2a2a;letter-spacing:0;text-transform:none;white-space:pre}
+
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:110px}
+  .hero .right{min-height:380px;height:60vh}
+  .hero .meta-left{display:none}
+  .manifesto{grid-template-columns:1fr;gap:30px}
+  .manifesto .body{grid-template-columns:1fr}
+  .opgrid{grid-template-columns:repeat(6,1fr)}
+  .op.a,.op.b,.op.c,.op.d,.op.e,.op.f{grid-column:span 6;grid-row:span 2}
+  .terminal{grid-template-columns:1fr}
+  .doss{grid-template-columns:1fr}
+  .doss article{border-right:0}
+  footer .grid{grid-template-columns:1fr 1fr}
+  nav.main{grid-template-columns:1fr 1fr;gap:10px}
+  nav.main ul{display:none}
+}
+
+/* tablet — only stack the statusbar items + nav auth at narrow widths */
+@media (max-width:900px){
+  .statusbar{flex-wrap:wrap;gap:6px 16px}
+  .statusbar .l,.statusbar .r{flex-wrap:wrap;gap:6px 14px}
+  nav.main{top:62px}
+  nav.main .auth{flex-wrap:wrap;gap:8px 12px;justify-content:flex-end}
+  nav.main .auth .key{display:none}
+  .hero .ctas{flex-wrap:wrap}
+  .term-window pre{overflow-x:auto}
+}
+
+/* mobile — hide non-essential statusbar items, stack signal form */
+@media (max-width:620px){
+  .statusbar{padding:8px 14px;font-size:9.5px}
+  .statusbar .l>span:nth-child(n+3),.statusbar .r>span:nth-child(n+2){display:none}
+  nav.main{top:44px;padding:12px 14px}
+  nav.main .brand{font-size:15px}
+  nav.main .auth .enter{padding:8px 12px;font-size:10px}
+  .hero{padding:110px 14px 50px}
+  .hero .left,.hero .lede,.hero .ctas{padding-left:0}
+  .hero .right{min-height:320px;height:48vh}
+  .manifesto,.ops,.terminal,.dossiers,.signal{padding:80px 14px}
+  .signal .form{flex-wrap:wrap}
+  .signal .form input,.signal .form button{flex:1 1 100%}
+  footer{padding:60px 14px 24px}
+  footer .grid{grid-template-columns:1fr;gap:28px}
+  footer .bot .ascii{display:none}
+  .marquee .track{gap:32px;font-size:10.5px}
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <div class="l">
+    <span class="pulse"><span class="dot"></span> LIVE FEED 04:17:22 UTC</span>
+    <span>NODE&nbsp;//&nbsp;TOR-EXIT.NL.07</span>
+    <span>LAT 52.379°N&nbsp;&nbsp;LON 4.900°E</span>
+  </div>
+  <div class="r">
+    <span>TLS 1.3 / X25519</span>
+    <span>SIG 0xF7A2 9C4E</span>
+    <span style="color:var(--acid)">SECURE</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="main">
+  <a href="#index" class="brand">null<b>/</b>sector</a>
+  <ul>
+    <li><a href="#index">Index</a></li>
+    <li><a href="#operations">Operations</a></li>
+    <li><a href="#dossiers">Dossiers</a></li>
+    <li><a href="#archive">Archive</a></li>
+    <li><a href="#signal">Signal</a></li>
+  </ul>
+  <div class="auth">
+    <span class="key">[PGP&nbsp;0xF7A2]</span>
+    <a href="#index" class="enter">Enter →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="index">
+  <span class="meta-left">VOL.07 — ISSUE 042 — ENCRYPTED INDEX — DO NOT FORWARD</span>
+
+  <div class="left">
+    <div class="tag"><span class="line"></span> Bulletin <em>// 06.17.2026</em></div>
+    <h1>
+      Of the <span class="red">unseen</span><br>
+      <span class="stroke">republic</span>,<br>
+      a quiet <em style="font-style:italic">archive</em><br>
+      of the <span class="redact">REDACTED</span>.
+    </h1>
+    <p class="lede">
+      A reading room for the <strong>after-hours internet</strong>. We collect the leaks, the long-form, the half-deleted threads, and the slow-burning investigations that the daylight web forgets by morning. <strong>No tracking. No telemetry. No daylight.</strong>
+    </p>
+    <div class="ctas">
+      <a class="btn primary" href="#operations">Open the index <span class="arr">→</span></a>
+      <a class="btn ghost" href="#signal">Subscribe via PGP</a>
+    </div>
+  </div>
+
+  <div class="right">
+    <span class="corner c1"></span><span class="corner c2"></span>
+    <span class="corner c3"></span><span class="corner c4"></span>
+
+    <div class="frame main">
+      <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=1800&q=85" alt="figure in hood, low light" />
+      <span class="label">SUBJECT 09 / IDENT MASKED</span>
+      <span class="coord">52.379 N · 4.900 E · ALT 14m</span>
+      <span class="crosshair"></span>
+    </div>
+    <div class="frame acc">
+      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1400&q=85" alt="neon alley" />
+      <span class="label" style="color:var(--blood);border-color:var(--blood)">LIVE 04:17</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="track">
+    <span><b>●</b> 14 NEW DROPS · 06.17 · 04:11 UTC <em>// VERIFIED</em></span>
+    <span><b>●</b> WHISTLE.FILE 027 · 1.4 GB · MIRRORED <em>// VERIFIED</em></span>
+    <span><b>●</b> BERLIN CELL — TRANSMISSION INCOMING <em>// 12 MIN</em></span>
+    <span><b>●</b> ONION ROUTE REINDEXED · 09 NODES</span>
+    <span><b>●</b> CANARY CHIRP · WEEK 24 · ALL CLEAR</span>
+    <span><b>●</b> 14 NEW DROPS · 06.17 · 04:11 UTC <em>// VERIFIED</em></span>
+    <span><b>●</b> WHISTLE.FILE 027 · 1.4 GB · MIRRORED <em>// VERIFIED</em></span>
+    <span><b>●</b> BERLIN CELL — TRANSMISSION INCOMING <em>// 12 MIN</em></span>
+    <span><b>●</b> ONION ROUTE REINDEXED · 09 NODES</span>
+    <span><b>●</b> CANARY CHIRP · WEEK 24 · ALL CLEAR</span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="label"><span>01 — Manifesto</span><span>§ 001</span></div>
+  <div>
+    <h2>
+      We <i>publish</i> what the<br>
+      <span class="u">daylight</span> won't,<br>
+      and we <i>archive</i> what<br>
+      the night <i>forgets</i>.
+    </h2>
+    <div class="body">
+      <p>
+        Null/Sector is a long-form publication for the encrypted internet. We work with researchers, journalists, ex-operators, and anonymous tipsters to surface stories that other platforms quietly bury. Every dispatch is cryptographically signed, mirrored across nine onion nodes, and held in cold storage at three undisclosed sites in Europe.
+      </p>
+      <p>
+        We do not run analytics. We do not store IP addresses. We do not negotiate with advertisers, governments, or the polite suggestions of legal departments. The reading room is dim on purpose — the work demands it. If you have something to say and nowhere safe to say it, the door is open. The key is below.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONS -->
+<section class="ops" id="operations">
+  <div class="head">
+    <h3>Field <em>operations</em>,<br>filed in the <em>dark</em>.</h3>
+    <div class="key">Indexed dispatches<b>042 / 144</b></div>
+  </div>
+  <div class="opgrid">
+
+    <a class="op a" href="#">
+      <img src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=2200&q=85" alt="dark deep ocean" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 037</span><span>BERLIN · BRUSSELS</span></div>
+        <div>
+          <h4>The <i>cable</i> that listens beneath the North Sea.</h4>
+          <div class="row" style="margin-top:18px"><span>Investigation · 22 min read</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="op b" href="#">
+      <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=1600&q=85" alt="hooded" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 038</span><span>CLASSIFIED</span></div>
+        <div>
+          <h4>Witness <i>17</i>.</h4>
+          <div class="row" style="margin-top:14px"><span>Long form · 09 min</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="op c" href="#">
+      <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=1600&q=85" alt="cyberpunk city" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 039</span><span>TOKYO · 03:11</span></div>
+        <div>
+          <h4>A city <i>rented</i> by the hour.</h4>
+          <div class="row" style="margin-top:14px"><span>Photo essay · 41 frames</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="op d" href="#">
+      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1400&q=85" alt="matrix code" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 040</span><span>SUPPLY-CHAIN</span></div>
+        <div>
+          <h4>Ninety<br>seconds of <i>silence</i>.</h4>
+          <div class="row" style="margin-top:14px"><span>Technical · 6 min</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="op e" href="#">
+      <img src="https://images.unsplash.com/photo-1547949003-9792a18a2601?w=1400&q=85" alt="server room" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 041</span><span>REYKJAVÍK</span></div>
+        <div>
+          <h4>The <i>cold</i> archive.</h4>
+          <div class="row" style="margin-top:14px"><span>Field notes · 14 min</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+    <a class="op f" href="#">
+      <img src="https://images.unsplash.com/photo-1493514789931-586cb221d7a7?w=1400&q=85" alt="dark corridor with red light" />
+      <div class="veil">
+        <div class="top"><span class="id">OP — 042</span><span>NEW</span></div>
+        <div>
+          <h4>A canary <i>stops</i> singing.</h4>
+          <div class="row" style="margin-top:14px"><span>Bulletin · 4 min</span><span class="arr">→</span></div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- TERMINAL -->
+<section class="terminal" id="archive">
+  <div class="left">
+    <div style="font-size:10px;letter-spacing:.3em;color:var(--blood);text-transform:uppercase;margin-bottom:16px">02 — The Wire</div>
+    <h3>A <b>live wire</b><br>into the<br><i>under-net.</i></h3>
+    <p>
+      Our terminal ingests 1,400+ feeds — paste sites, leak boards, federated forums, .onion bulletins — and surfaces anomalies the moment they appear. No filters. No flattering algorithm. Just signal, in the order it arrived.
+    </p>
+    <div class="specs">
+      <div>Feeds tracked<b>1,412</b></div>
+      <div>Avg. latency<b>2.4s</b></div>
+      <div>Drops / 24h<b>87</b></div>
+      <div>Uptime · 90d<b>99.98%</b></div>
+    </div>
+  </div>
+
+  <div class="term-window">
+    <div class="bar">
+      <span class="d r"></span><span class="d y"></span><span class="d g"></span>
+      <span>nullsector — wire</span>
+      <span class="path">~/feeds/wire.live</span>
+    </div>
+<pre><span class="c">// connecting via tor-exit.nl.07 ………… <span class="p">OK</span></span>
+<span class="c">// handshake X25519 ………………………………… <span class="p">OK</span></span>
+<span class="c">// listening on 0.0.0.0:4443</span>
+
+<span class="b">[04:17:09]</span> <span class="p">SIG</span> drop · whistle.file/027 · <span class="h">1.42GB</span> · ed25519 ✓
+<span class="b">[04:17:14]</span> <span class="w">WRN</span> canary · subject/03 · missed weekly chirp
+<span class="b">[04:17:22]</span> <span class="p">SIG</span> mirror · 09/09 nodes synced · zfs snapshot
+<span class="b">[04:17:31]</span> <span class="r">ALR</span> exit-node · de-frankfurt-12 · packet loss 4%
+<span class="b">[04:17:44]</span> <span class="p">SIG</span> dossier · subject/17 · status → <span class="h">surfaced</span>
+<span class="b">[04:18:02]</span> <span class="c">…  ingesting paste.bin/4z9q · 312 lines</span>
+<span class="b">[04:18:09]</span> <span class="p">SIG</span> matched 7 indicators · op-040
+<span class="b">[04:18:18]</span> <span class="b">tip</span> ─ <span class="b">"the cable was cut at 02:14, not 02:41."</span>
+<span class="b">[04:18:31]</span> <span class="p">SIG</span> signed · 0xF7A2 9C4E · publishing<span class="cursor-blink"></span></pre>
+  </div>
+</section>
+
+<!-- DOSSIERS -->
+<section class="dossiers" id="dossiers">
+  <div class="head">
+    <h3>The <span class="s">people</span> who whisper<br>through the wire.</h3>
+    <div class="leg">Faces obscured by request. Identities held in escrow with a Swiss notary and released only on event of confirmed harm.</div>
+  </div>
+  <div class="doss">
+
+    <article>
+      <div class="hdr"><span>Dossier · 011</span><b>● ACTIVE</b></div>
+      <div class="portrait">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&q=85" alt="portrait" />
+        <span class="id">SUBJ-011</span>
+      </div>
+      <h4>"<span class="blk">REDACTED</span>,"<br>former auditor.</h4>
+      <p>Spent eleven years inside a Big Four firm reviewing the books of a state-owned energy concern. Walked out with a single encrypted drive and a list of forty-two names. Talks only on Thursdays, only in German.</p>
+      <div class="foot"><span>Berlin · DE</span><span class="stat">7 dispatches</span></div>
+    </article>
+
+    <article>
+      <div class="hdr"><span>Dossier · 012</span><b>● ACTIVE</b></div>
+      <div class="portrait">
+        <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?w=900&q=85" alt="portrait" />
+        <span class="id">SUBJ-012</span>
+      </div>
+      <h4>The <span class="blk">REDACTED</span> cartographer.</h4>
+      <p>Maps undersea fibre routes the way other people map hiking trails. Insists the most interesting stories of the next decade will be written in cables, not in cabinets. Lives, allegedly, on a boat.</p>
+      <div class="foot"><span>Reykjavík · IS</span><span class="stat">14 dispatches</span></div>
+    </article>
+
+    <article>
+      <div class="hdr"><span>Dossier · 013</span><b style="color:var(--acid)">● COLD</b></div>
+      <div class="portrait">
+        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=85" alt="portrait" />
+        <span class="id">SUBJ-013</span>
+      </div>
+      <h4>Witness <i>17</i>, in <span class="blk">XXXX</span>.</h4>
+      <p>Reached us through a chain of three intermediaries and a dead drop in a Lisbon café. Their first transmission is being prepared for publication. We have been asked to wait until the 23rd. We will wait.</p>
+      <div class="foot"><span>Location withheld</span><span class="stat">Pending</span></div>
+    </article>
+
+  </div>
+</section>
+
+<!-- SIGNAL -->
+<section class="signal" id="signal">
+  <div class="inner">
+    <div class="pre">— 03 · Signal —</div>
+    <h2>If you have <i>nothing</i><br>to say <span class="stroke">safely</span>,<br>say it <i>here</i>.</h2>
+    <form class="form" onsubmit="event.preventDefault();this.querySelector('button').textContent='Key sent ✓'">
+      <input type="email" placeholder="your.alias@protonmail.com" required>
+      <button type="submit">Request key →</button>
+    </form>
+    <div class="fine">A one-time PGP fingerprint will be sent to the address above. We never store it. The reading room opens at 04:00 UTC, every night, until it doesn't.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="grid">
+    <div class="brand-blk">
+      <h5>null<b>/</b>sector</h5>
+      <p>"A reading room for the after-hours internet."</p>
+    </div>
+    <div class="col">
+      <h6>The Room</h6>
+      <ul>
+        <li><a href="#index">Index</a></li>
+        <li><a href="#operations">Operations</a></li>
+        <li><a href="#dossiers">Dossiers</a></li>
+        <li><a href="#archive">The Wire</a></li>
+        <li><a href="archive.html">Cold Archive</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h6>Comms</h6>
+      <ul>
+        <li><a href="#">PGP · 0xF7A2 9C4E</a></li>
+        <li><a href="#">.onion mirror</a></li>
+        <li><a href="#">SecureDrop</a></li>
+        <li><a href="#">Signal · +44 …</a></li>
+        <li><a href="#">Dead drop map</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h6>Canary</h6>
+      <ul>
+        <li><a href="#">Week 24 · all clear</a></li>
+        <li><a href="#">Warrant log</a></li>
+        <li><a href="#">Transparency</a></li>
+        <li><a href="#">Editorial policy</a></li>
+        <li><a href="#">Threat model</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="bot">
+    <span>© 2026 NULL/SECTOR · NO RIGHTS RESERVED · MIRROR FREELY</span>
+    <pre class="ascii">  ┌─[ N / S ]─┐
+  │  0xF7A2   │
+  └───────────┘</pre>
+    <span>VOL 07 · ISSUE 042 · BUILD 0xF7A2 9C4E</span>
+  </div>
+</footer>
+
+<script>
+// custom cursor
+const c = document.getElementById('cursor');
+addEventListener('mousemove', e => { c.style.left = e.clientX+'px'; c.style.top = e.clientY+'px'; });
+document.querySelectorAll('a,button,.op,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{c.style.width='28px';c.style.height='28px';c.style.background='transparent';c.style.border='1px solid #c8ff00';c.style.boxShadow='0 0 16px rgba(200,255,0,.6)';});
+  el.addEventListener('mouseleave',()=>{c.style.width='8px';c.style.height='8px';c.style.background='#c8ff00';c.style.border='0';c.style.boxShadow='0 0 12px #c8ff00';});
+});
+
+// live clock
+const status = document.querySelector('.statusbar .pulse');
+setInterval(()=>{
+  const d = new Date();
+  const t = d.toUTCString().slice(17,25);
+  if(status) status.innerHTML = '<span class="dot"></span> LIVE FEED '+t+' UTC';
+},1000);
+
+// scroll-spy: highlight active nav item
+const navLinks = document.querySelectorAll('nav.main ul li a[href^="#"]');
+const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy = () => {
+  const y = scrollY + 140;
+  let cur = sections[0];
+  sections.forEach(s => { if (s && s.offsetTop <= y) cur = s; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + (cur && cur.id)));
+};
+addEventListener('scroll', spy, {passive:true});
+spy();
+</script>
+</body>
+</html>
 index.html
 <!doctype html>
 <html lang="en">
